@@ -5,11 +5,11 @@ from flask import Flask, request, jsonify
 # Define the database connection parameters
 def get_connection():
     return psycopg2.connect(
-        dbname="poojanataraja",
-        user="poojanataraja",
-        password="your_password",
+        dbname="realoneinvest",  # Use lowercase to avoid PostgreSQL case-sensitivity issues
+        user="karthik1",
+        password="Info123tech",
         host="localhost",
-        port="5432"
+        port="5433"  # Ensure PostgreSQL is running on this port
     )
 
 # Function to create the users table
@@ -65,9 +65,11 @@ def store_user():
         phone_number = data.get('phone_number')
         address = data.get('address')
 
+        # Validate required fields
         if not (first_name and last_name and email and password and reenter_password):
             return jsonify({"error": "First name, last name, email, password, and reentered password are required."}), 400
 
+        # Check if passwords match
         if password != reenter_password:
             return jsonify({"error": "Passwords do not match."}), 400
 
@@ -99,4 +101,4 @@ def store_user():
 if __name__ == '__main__':
     # Create the users table before running the app
     create_users_table()
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0", port=5000)
